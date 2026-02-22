@@ -3,80 +3,448 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Website</title>
+  <title>Nexa Wealth - Dashboard</title>
   <style>
-    body{margin:0;font-family:Arial, sans-serif;background:#0b1220;color:#fff}
-    header{padding:60px 20px;text-align:center;background:linear-gradient(135deg,#1d4ed8,#9333ea)}
-    h1{margin:0;font-size:40px}
-    p{opacity:.9;max-width:700px;margin:12px auto}
-    .btn{display:inline-block;margin-top:18px;padding:12px 18px;background:#fff;color:#111;
-      border-radius:12px;text-decoration:none;font-weight:bold}
-    .container{max-width:1000px;margin:0 auto;padding:30px 20px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-    .card{background:#111a2e;border:1px solid rgba(255,255,255,.08);padding:18px;border-radius:16px}
-    .card h3{margin:0 0 8px}
-    footer{padding:25px;text-align:center;opacity:.7}
-    .nav{display:flex;gap:16px;justify-content:center;margin-top:18px;flex-wrap:wrap}
-    .nav a{color:#fff;opacity:.9;text-decoration:none}
-    .nav a:hover{opacity:1;text-decoration:underline}
+    :root{
+      --bg:#060b14;
+      --card:#0b1426;
+      --card2:#0a1222;
+      --border:rgba(255,255,255,.08);
+      --text:#eaf0ff;
+      --muted:rgba(234,240,255,.65);
+      --green:#18ff9a;
+      --cyan:#2ae6ff;
+      --shadow:0 18px 50px rgba(0,0,0,.45);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(900px 500px at 10% 10%, rgba(42,230,255,.14), transparent 60%),
+        radial-gradient(900px 600px at 90% 10%, rgba(24,255,154,.12), transparent 55%),
+        radial-gradient(900px 600px at 50% 100%, rgba(147,51,234,.10), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      padding-bottom:92px; /* space for bottom nav */
+    }
+    .wrap{max-width: 980px; margin:0 auto; padding:18px 16px 28px;}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; padding:10px 2px 16px;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background: radial-gradient(circle at 30% 30%, rgba(42,230,255,.9), rgba(24,255,154,.55));
+      box-shadow: 0 10px 30px rgba(42,230,255,.12);
+      position:relative;
+    }
+    .logo:after{
+      content:"↗";
+      position:absolute; inset:0;
+      display:grid; place-items:center;
+      color:#041019; font-weight:900; font-size:18px;
+    }
+    .brand h1{font-size:22px; margin:0; letter-spacing:.2px}
+    .brand h1 span{color:var(--cyan)}
+    .meta{ text-align:right }
+    .meta .welcome{font-size:14px; color:var(--muted)}
+    .meta .rate{font-size:13px; color:rgba(234,240,255,.55); margin-top:2px}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border:1px solid var(--border);
+      border-radius:999px; background:rgba(255,255,255,.03);
+    }
+    .dot{width:8px; height:8px; border-radius:99px; background:var(--green); box-shadow:0 0 18px rgba(24,255,154,.5)}
+    .grid{
+      display:grid; gap:14px;
+      grid-template-columns: 1.2fr .8fr;
+      align-items:start;
+    }
+    @media (max-width: 760px){
+      .grid{grid-template-columns:1fr;}
+      .meta{display:none}
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-inner{padding:18px}
+    .card-title{
+      display:flex; align-items:center; justify-content:space-between;
+      color:rgba(234,240,255,.68);
+      font-size:14px; letter-spacing:.2px;
+      margin-bottom:10px;
+    }
+    .icon-btn{
+      width:36px; height:36px;
+      display:grid; place-items:center;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      cursor:pointer;
+      user-select:none;
+    }
+    .balance{
+      font-size:44px; font-weight:800; letter-spacing:.3px; margin:0;
+    }
+    .sub{
+      color:rgba(234,240,255,.55); margin-top:6px; font-size:14px;
+    }
+    .profit{
+      margin-top:14px;
+      display:flex; align-items:center; gap:10px;
+      color:rgba(234,240,255,.7); font-size:14px;
+    }
+    .profit b{color:var(--green)}
+    .arrow{color:var(--green); font-weight:900}
+
+    .stat-row{
+      display:grid; grid-template-columns: 1fr 1fr; gap:14px;
+      margin-top:14px;
+    }
+    .mini{
+      background:rgba(255,255,255,.02);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+    }
+    .mini .label{color:rgba(234,240,255,.6); font-size:12px; letter-spacing:.6px; text-transform:uppercase}
+    .mini .val{margin-top:10px; font-size:26px; font-weight:800}
+    .mini .val.green{color:var(--green)}
+    .mini .hint{margin-top:6px; color:rgba(234,240,255,.5); font-size:12px}
+
+    .list-card{margin-top:14px}
+    .earn{
+      font-size:34px; font-weight:900; margin:0;
+      color:var(--green);
+    }
+    .desc{margin-top:8px; color:rgba(234,240,255,.55); font-size:13px; line-height:1.4}
+
+    .banner{
+      position:sticky; bottom:86px; /* sits above nav */
+      margin-top:16px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:linear-gradient(90deg, rgba(42,230,255,.12), rgba(24,255,154,.10));
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+    }
+    .banner .left{display:flex; align-items:center; gap:12px}
+    .dl-ico{
+      width:42px;height:42px;border-radius:14px;
+      display:grid; place-items:center;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.2);
+    }
+    .banner h3{margin:0; font-size:14px}
+    .banner p{margin:2px 0 0; font-size:12px; color:rgba(234,240,255,.6)}
+    .btn{
+      border:0; cursor:pointer;
+      padding:10px 14px; border-radius:999px;
+      background:linear-gradient(90deg, var(--green), var(--cyan));
+      color:#061018; font-weight:800;
+    }
+    .x{
+      width:34px;height:34px;border-radius:12px;
+      display:grid; place-items:center;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.12);
+      cursor:pointer;
+    }
+
+    /* Bottom nav */
+    .nav{
+      position:fixed; left:0; right:0; bottom:0;
+      background: rgba(8,12,20,.72);
+      border-top:1px solid var(--border);
+      backdrop-filter: blur(12px);
+      padding:10px 10px 14px;
+    }
+    .nav .inner{
+      max-width:980px; margin:0 auto;
+      display:grid; grid-template-columns: repeat(5, 1fr); gap:8px;
+    }
+    .tab{
+      display:flex; flex-direction:column; align-items:center; gap:6px;
+      padding:10px 8px; border-radius:16px;
+      color:rgba(234,240,255,.65);
+      border:1px solid transparent;
+      cursor:pointer;
+      user-select:none;
+      font-size:12px;
+    }
+    .tab .ico{font-size:18px}
+    .tab.active{
+      color:var(--green);
+      background:rgba(24,255,154,.08);
+      border-color: rgba(24,255,154,.18);
+      box-shadow: 0 10px 30px rgba(24,255,154,.08);
+    }
+
+    /* Pages */
+    .page{display:none}
+    .page.active{display:block}
+
+    .section-title{
+      margin:16px 2px 10px;
+      font-size:14px;
+      color:rgba(234,240,255,.6);
+      letter-spacing:.6px;
+      text-transform:uppercase;
+    }
+    .input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      outline:none;
+      margin-top:10px;
+    }
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .row .btn2{
+      padding:10px 14px; border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      cursor:pointer;
+    }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Hi, I’m Hassan 👋</h1>
-    <p>Welcome to my website. Ye meri GitHub Pages par live website hai. Ab main isko professional bana raha hoon.</p>
-
-    <div class="nav">
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#contact">Contact</a>
-    </div>
-
-    <a class="btn" href="#contact">Contact Me</a>
-  </header>
-
-  <div class="container">
-    <section id="about">
-      <h2>About Me</h2>
-      <p>
-        Main apni pehli website bana raha hoon. Is page ko aap portfolio, business ya personal website bana sakte ho.
-      </p>
-    </section>
-
-    <section id="services" style="margin-top:28px">
-      <h2>Services</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Web Design</h3>
-          <p>Simple aur clean website design.</p>
-        </div>
-        <div class="card">
-          <h3>Video Editing</h3>
-          <p>Professional edits for social media & YouTube.</p>
-        </div>
-        <div class="card">
-          <h3>Content Support</h3>
-          <p>Ideas, planning aur premium content strategy.</p>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo"></div>
+        <div>
+          <h1><span>Nexa</span> Wealth</h1>
+          <div class="pill"><span class="dot"></span><span style="color:rgba(234,240,255,.7);font-size:12px">Live Dashboard (Demo)</span></div>
         </div>
       </div>
-    </section>
 
-    <section id="contact" style="margin-top:28px">
-      <h2>Contact</h2>
-      <p>Button par click karo — email open ho jayegi:</p>
+      <div class="meta">
+        <div class="welcome">Welcome, <b id="userName">Ali</b></div>
+        <div class="rate">1 USD = <span id="rate">285</span> PKR</div>
+      </div>
+    </div>
 
-      <a class="btn" href="mailto:youremail@gmail.com">Email Me</a>
-      <p style="margin-top:10px;opacity:.8">Apna email yahan replace kar dena: <b>youremail@gmail.com</b></p>
-    </section>
+    <!-- PAGES -->
+    <div id="page-dashboard" class="page active">
+      <div class="grid">
+        <div>
+          <!-- Balance -->
+          <div class="card">
+            <div class="card-inner">
+              <div class="card-title">
+                <span>Available Balance</span>
+                <div class="icon-btn" id="toggleEye" title="Hide/Show">👁️</div>
+              </div>
+
+              <p class="balance" id="balUsd">$0.80</p>
+              <div class="sub" id="balPkr">PKR 228</div>
+
+              <div class="profit">
+                <span class="arrow">↗</span>
+                <b id="dailyPct">+4.00%</b>
+                <span>Daily Profit</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="mini">
+              <div class="label">Total Invested</div>
+              <div class="val">$10.00</div>
+              <div class="hint">Active plans</div>
+            </div>
+            <div class="mini">
+              <div class="label">Referral Earnings</div>
+              <div class="val green">$0.80</div>
+              <div class="hint">Invites reward</div>
+            </div>
+          </div>
+
+          <!-- Banner -->
+          <div class="banner" id="banner">
+            <div class="left">
+              <div class="dl-ico">⬇️</div>
+              <div>
+                <h3>Download Our App</h3>
+                <p>Get the best experience…</p>
+              </div>
+            </div>
+            <button class="btn" onclick="alert('Demo: App download link yahan add karo')">Download</button>
+            <div class="x" id="closeBanner">✕</div>
+          </div>
+        </div>
+
+        <div>
+          <!-- Earnings -->
+          <div class="card list-card">
+            <div class="card-inner">
+              <div class="card-title">
+                <span>Total Earnings</span>
+                <span style="color:var(--green); font-weight:900">$</span>
+              </div>
+              <p class="earn" id="earnUsd">$-8.40</p>
+              <div class="desc">Lifetime profits, bonuses & referral income</div>
+
+              <div class="section-title">Quick Actions</div>
+              <div class="row">
+                <button class="btn2" onclick="alert('Demo: Deposit flow')">Deposit</button>
+                <button class="btn2" onclick="alert('Demo: Withdraw flow')">Withdraw</button>
+                <button class="btn2" onclick="alert('Demo: Add plan')">Add Plan</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Small info card -->
+          <div class="card" style="margin-top:14px">
+            <div class="card-inner">
+              <div class="card-title"><span>Today</span><span style="color:rgba(234,240,255,.55); font-size:12px" id="today"></span></div>
+              <div class="desc">Ye UI aapke screenshot jaisi feel deta hai: dark neon theme, cards, bottom navigation.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-invite" class="page">
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-title"><span>Invite Friends</span><span style="color:var(--green);font-weight:900">👥</span></div>
+          <div class="desc">Apna referral link yahan show karo.</div>
+          <input class="input" id="refLink" value="https://your-site.github.io/?ref=ALI123" />
+          <div class="row" style="margin-top:10px">
+            <button class="btn2" onclick="copyText('refLink')">Copy Link</button>
+            <button class="btn2" onclick="alert('Share options add kar sakte ho')">Share</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-wallet" class="page">
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-title"><span>Wallet</span><span style="color:var(--cyan);font-weight:900">💳</span></div>
+          <div class="desc">Wallet transactions list yahan add hoti hai (deposit/withdraw history).</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-plan" class="page">
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-title"><span>Plans</span><span style="color:var(--green);font-weight:900">📦</span></div>
+          <div class="desc">Plans / packages ka section yahan add karo.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-settings" class="page">
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-title"><span>Settings</span><span style="color:rgba(234,240,255,.6);font-weight:900">⚙️</span></div>
+
+          <div class="section-title">Profile (Demo)</div>
+          <input class="input" id="nameInput" placeholder="Your name e.g., Ali" />
+          <div class="row" style="margin-top:10px">
+            <button class="btn2" id="saveName">Save</button>
+            <button class="btn2" onclick="alert('Real settings backend se hoti hain')">More</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <footer>
-    © <span id="year"></span> My Website — Built with GitHub Pages
-  </footer>
+  <!-- Bottom Navigation -->
+  <div class="nav">
+    <div class="inner">
+      <div class="tab active" data-tab="dashboard"><div class="ico">▦</div>Dashboard</div>
+      <div class="tab" data-tab="invite"><div class="ico">👥</div>Invite</div>
+      <div class="tab" data-tab="wallet"><div class="ico">💳</div>Wallet</div>
+      <div class="tab" data-tab="plan"><div class="ico">📦</div>Plan</div>
+      <div class="tab" data-tab="settings"><div class="ico">⚙️</div>Settings</div>
+    </div>
+  </div>
 
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+    // Date
+    const d = new Date();
+    document.getElementById("today").textContent = d.toDateString();
+
+    // Tabs
+    const tabs = document.querySelectorAll(".tab");
+    const pages = {
+      dashboard: document.getElementById("page-dashboard"),
+      invite: document.getElementById("page-invite"),
+      wallet: document.getElementById("page-wallet"),
+      plan: document.getElementById("page-plan"),
+      settings: document.getElementById("page-settings"),
+    };
+
+    tabs.forEach(t => {
+      t.addEventListener("click", () => {
+        tabs.forEach(x => x.classList.remove("active"));
+        t.classList.add("active");
+        const key = t.dataset.tab;
+        Object.values(pages).forEach(p => p.classList.remove("active"));
+        pages[key].classList.add("active");
+        window.scrollTo({top:0, behavior:"smooth"});
+      });
+    });
+
+    // Hide/show balance
+    let hidden = false;
+    const balUsdEl = document.getElementById("balUsd");
+    const balPkrEl = document.getElementById("balPkr");
+    document.getElementById("toggleEye").addEventListener("click", () => {
+      hidden = !hidden;
+      if(hidden){
+        balUsdEl.textContent = "••••";
+        balPkrEl.textContent = "••••";
+      }else{
+        balUsdEl.textContent = "$0.80";
+        balPkrEl.textContent = "PKR 228";
+      }
+    });
+
+    // Banner close
+    document.getElementById("closeBanner").addEventListener("click", () => {
+      document.getElementById("banner").style.display = "none";
+    });
+
+    // Save name (demo)
+    const userName = document.getElementById("userName");
+    document.getElementById("saveName").addEventListener("click", () => {
+      const v = document.getElementById("nameInput").value.trim();
+      if(!v){ alert("Name likho"); return; }
+      userName.textContent = v;
+      alert("Saved (demo).");
+    });
+
+    // Copy helper
+    function copyText(id){
+      const el = document.getElementById(id);
+      el.select();
+      el.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("Copied!");
+    }
+    window.copyText = copyText;
   </script>
 </body>
 </html>
