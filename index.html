@@ -2,253 +2,124 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login • Nex Wealth</title>
-
   <style>
     :root{
-      --bg:#060b14;
-      --border:rgba(255,255,255,.10);
-      --text:#eaf0ff;
-      --muted:rgba(234,240,255,.65);
-      --green:#18ff9a;
-      --cyan:#2ae6ff;
-      --r:18px;
-      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --bg:#060b14;--border:rgba(255,255,255,.10);--text:#eaf0ff;
+      --muted:rgba(234,240,255,.65);--green:#18ff9a;--cyan:#2ae6ff;
+      --r:18px;--shadow:0 18px 60px rgba(0,0,0,.55);
     }
     *{box-sizing:border-box}
     body{
-      margin:0;
-      min-height:100vh;
-      display:grid;
-      place-items:center;
+      margin:0;min-height:100vh;display:grid;place-items:center;padding:18px;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       background:
         radial-gradient(900px 500px at 10% 10%, rgba(42,230,255,.14), transparent 60%),
         radial-gradient(900px 600px at 90% 10%, rgba(24,255,154,.12), transparent 55%),
         var(--bg);
       color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      padding:18px;
     }
-    .wrap{width:min(420px,100%)}
     .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      width:min(520px,100%);
       border:1px solid var(--border);
-      border-radius:var(--r);
+      border-radius:24px;
+      background:rgba(255,255,255,.04);
       box-shadow:var(--shadow);
-      padding:18px;
+      padding:22px;
       backdrop-filter: blur(10px);
     }
-    .top{
-      display:flex; gap:12px; align-items:center;
-      margin-bottom:14px;
-    }
+    .head{display:flex;gap:14px;align-items:center;margin-bottom:14px}
     .logo{
-      width:46px;height:46px;border-radius:14px;
-      background:linear-gradient(135deg,var(--cyan),var(--green));
-      display:grid;place-items:center;
-      box-shadow:0 12px 35px rgba(42,230,255,.25);
-      flex:0 0 auto;
+      width:52px;height:52px;border-radius:16px;
+      background:linear-gradient(135deg,var(--green),var(--cyan));
+      display:grid;place-items:center;color:#001b12;font-weight:900;
     }
-    .logo svg{width:22px;height:22px;fill:#061018}
-    h1{font-size:20px;margin:0;letter-spacing:.2px}
-    .sub{font-size:13px;color:var(--muted);margin-top:2px}
-
-    label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}
+    h1{margin:0;font-size:26px}
+    .sub{margin:2px 0 0;color:var(--muted);font-size:13px}
+    label{display:block;margin-top:12px;margin-bottom:6px;color:var(--muted);font-size:13px}
     input{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.03);
-      color:var(--text);
+      width:100%;padding:14px 14px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.22);color:var(--text);
       outline:none;
     }
-    input:focus{border-color:rgba(42,230,255,.45)}
+    input:focus{border-color:rgba(42,230,255,.55)}
     .row{
-      display:flex;justify-content:space-between;align-items:center;
-      margin-top:10px;
+      display:flex;justify-content:space-between;gap:12px;
+      margin-top:10px;font-size:13px
     }
     .link{
-      font-size:12px;color:rgba(234,240,255,.75);
-      text-decoration:none;
+      color:rgba(234,240,255,.75);text-decoration:none;
       cursor:pointer;
     }
-    .link:hover{color:#fff;text-decoration:underline}
-
+    .link:hover{color:white}
     .btn{
-      width:100%;
-      padding:12px;
-      margin-top:14px;
-      border:0;
-      border-radius:14px;
-      cursor:pointer;
-      font-weight:900;
+      width:100%;padding:14px;border-radius:14px;border:0;cursor:pointer;
+      margin-top:14px;font-weight:800;
     }
-    .btnPrimary{
+    .btn.primary{
       background:linear-gradient(90deg,var(--green),var(--cyan));
-      color:#061018;
+      color:#001b12;
     }
-    .btnGhost{
-      background:transparent;
-      border:1px solid rgba(255,255,255,.16);
+    .btn.ghost{
+      background:transparent;border:1px solid rgba(255,255,255,.14);
       color:var(--text);
-      margin-top:10px;
-      font-weight:800;
     }
-
-    /* modal */
-    .overlay{
-      position:fixed; inset:0;
-      background:rgba(0,0,0,.55);
-      display:none; align-items:center; justify-content:center;
-      padding:16px;
-    }
+    .msg{margin-top:10px;font-size:13px;color:var(--muted)}
+    /* Modal */
+    .overlay{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.55);padding:18px}
     .modal{
-      width:min(420px,100%);
-      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
-      border:1px solid var(--border);
-      border-radius:18px;
-      box-shadow:var(--shadow);
-      padding:16px;
-      backdrop-filter: blur(10px);
+      width:min(520px,100%);background:#0b1220;border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;padding:18px;
     }
-    .mTitle{font-size:16px;margin:0 0 6px}
-    .mText{font-size:13px;color:var(--muted);margin:0 0 12px;line-height:1.4}
-    .mRow{display:flex; gap:10px; margin-top:12px}
-    .mRow button{flex:1}
-
-    .success{
-      display:none;
-      margin-top:10px;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid rgba(24,255,154,.25);
-      background:rgba(24,255,154,.08);
-      color:rgba(234,240,255,.9);
-      font-size:12px;
-      line-height:1.35;
-    }
+    .modal h2{margin:0 0 8px}
+    .modal .x{float:right;cursor:pointer;color:rgba(255,255,255,.7)}
   </style>
 </head>
-
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="top">
-        <div class="logo" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M7 17l10-10v6h2V3H9v2h6L5 15l2 2z"/></svg>
-        </div>
-        <div>
-          <h1>Nex Wealth</h1>
-          <div class="sub">Welcome to Earning Platform</div>
-        </div>
+  <div class="card">
+    <div class="head">
+      <div class="logo">↗</div>
+      <div>
+        <h1>Nex Wealth</h1>
+        <div class="sub">Welcome to Earning Platform</div>
       </div>
-
-      <label>Username</label>
-      <input id="username" placeholder="e.g., ali123" autocomplete="username" />
-
-      <label>Password</label>
-      <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" />
-
-      <div class="row">
-        <span class="link" id="forgotBtn">Forgot password?</span>
-        <span class="link" onclick="window.location.href='signup.html'">Create account →</span>
-      </div>
-
-      <button class="btn btnPrimary" id="loginBtn">Login</button>
-      <button class="btn btnGhost" onclick="window.location.href='signup.html'">Create Account</button>
     </div>
+
+    <label>Email</label>
+    <input id="loginEmail" type="email" placeholder="e.g., ali@gmail.com">
+
+    <label>Password</label>
+    <input id="loginPass" type="password" placeholder="Enter your password">
+
+    <div class="row">
+      <a class="link" id="forgotBtn">Forgot password?</a>
+      <a class="link" href="signup.html">Create account →</a>
+    </div>
+
+    <button class="btn primary" id="loginBtn">Login</button>
+
+    <button class="btn ghost" onclick="window.location.href='signup.html'">Create Account</button>
+
+    <div class="msg" id="msg"></div>
   </div>
 
-  <!-- Forgot Password Modal (Professional demo) -->
+  <!-- Forgot modal -->
   <div class="overlay" id="overlay">
     <div class="modal">
-      <p class="mTitle">Reset your password</p>
-      <p class="mText">Enter your username or email. We’ll send a reset link (demo).</p>
+      <div class="x" id="closeModal">✕</div>
+      <h2>Reset Password</h2>
+      <div class="sub">Apna email likho, reset link email pe aa jayega.</div>
 
-      <label style="margin-top:0">Username or Email</label>
-      <input id="resetInput" placeholder="e.g., ali123 or ali@gmail.com" />
+      <label style="margin-top:12px">Email</label>
+      <input id="resetEmail" type="email" placeholder="e.g., ali@gmail.com">
 
-      <div class="success" id="successBox">
-        ✅ Reset link sent (demo).  
-        Real website me yahan email aata hai. Ab aap “Close” kar ke login page pe wapas ja sakte ho.
-      </div>
-
-      <div class="mRow">
-        <button class="btn btnGhost" id="closeModal">Close</button>
-        <button class="btn btnPrimary" id="sendLinkBtn">Send reset link</button>
-      </div>
+      <button class="btn primary" id="sendResetBtn">Send Reset Link</button>
+      <div class="msg" id="resetMsg"></div>
     </div>
   </div>
 
-  <script>
-    const $ = (id)=>document.getElementById(id);
-
-    // ✅ Login validation (registered user only)
-    $("loginBtn").addEventListener("click", ()=>{
-      const username = $("username").value.trim();
-      const password = $("password").value.trim();
-
-      const regName = localStorage.getItem("nw_registered_name");
-      const regPin  = localStorage.getItem("nw_registered_pin");
-
-      if(!regName || !regPin){
-        alert("No account found. Please create an account first.");
-        return;
-      }
-
-      // demo: signup stores name/pin, we treat them as username/password
-      if(username !== regName || password !== regPin){
-        alert("Invalid username or password.");
-        return;
-      }
-
-      localStorage.setItem("nw_name", username);
-      window.location.href = "dashboard.html";
-    });
-
-    // ✅ Forgot modal open/close
-    $("forgotBtn").addEventListener("click", ()=>{
-      $("overlay").style.display="flex";
-      $("successBox").style.display="none";
-      $("resetInput").value="";
-    });
-
-    $("closeModal").addEventListener("click", ()=> $("overlay").style.display="none");
-    $("overlay").addEventListener("click", (e)=>{
-      if(e.target.id==="overlay") $("overlay").style.display="none";
-    });
-
-    // ✅ Send reset link (demo)
-    $("sendLinkBtn").addEventListener("click", ()=>{
-      const v = $("resetInput").value.trim();
-      if(!v){
-        alert("Please enter username or email.");
-        return;
-      }
-      $("successBox").style.display="block";
-    });
-  </script>
-  <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyApp1ryOm7jEbBYXFOUBh2nt29EhKm-En8",
-    authDomain: "next-wealth.firebaseapp.com",
-    projectId: "next-wealth",
-    storageBucket: "next-wealth.firebasestorage.app",
-    messagingSenderId: "566046327509",
-    appId: "1:566046327509:web:3f28fc9f91812531c5185c",
-    measurementId: "G-2NL786R6KR"
-  };
-
-
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
