@@ -1,63 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard • Nex Wealth</title>
+  <style>
+    :root{
+      --bg:#060b14; --border:rgba(255,255,255,.10);
+      --text:#eaf0ff; --muted:rgba(234,240,255,.65);
+      --green:#18ff9a; --cyan:#2ae6ff;
+      --card:rgba(255,255,255,.04);
+      --shadow:0 18px 60px rgba(0,0,0,.55);
+      --r:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(900px 500px at 10% 10%, rgba(42,230,255,.14), transparent 60%),
+        radial-gradient(900px 600px at 90% 10%, rgba(24,255,154,.12), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      padding:18px;
+    }
+    .wrap{width:min(980px,100%); margin:0 auto}
+    .header{
+      display:flex; justify-content:space-between; align-items:center;
+      gap:12px; margin-bottom:14px;
+    }
+    .brand{display:flex; gap:12px; align-items:center}
+    .logo{
+      width:46px;height:46px;border-radius:14px;
+      background:linear-gradient(135deg,var(--cyan),var(--green));
+      display:grid;place-items:center;
+      box-shadow:0 12px 35px rgba(42,230,255,.25);
+    }
+    .logo svg{width:22px;height:22px;fill:#061018}
+    .title{font-size:20px;margin:0}
+    .sub{font-size:13px;color:var(--muted);margin-top:2px}
+    .pill{
+      padding:10px 12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      border-radius:999px;
+      font-size:13px;
+      color:rgba(234,240,255,.75);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+    }
+    .card{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      padding:16px;
+      backdrop-filter: blur(10px);
+    }
+    .cTitle{font-size:13px;color:rgba(234,240,255,.72);margin:0 0 8px}
+    .big{font-size:44px; font-weight:900; margin:0}
+    .big span{color:var(--green)}
+    .small{font-size:13px;color:var(--muted);margin-top:8px}
+    .btnRow{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .btn{
+      padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;font-weight:800;
+    }
+    .btnPrimary{background:linear-gradient(90deg,var(--green),var(--cyan));border:0;color:#061018}
+    .span8{grid-column: span 8}
+    .span4{grid-column: span 4}
 
-<style>
-body{
-  margin:0;
-  background:#060b14;
-  color:white;
-  font-family:Arial;
-  padding:20px;
-}
-.card{
-  background:#111a26;
-  padding:20px;
-  border-radius:15px;
-  max-width:400px;
-  margin:auto;
-}
-.balance{
-  font-size:30px;
-  color:#18ff9a;
-}
-button{
-  margin-top:20px;
-  padding:10px;
-  width:100%;
-  border:none;
-  border-radius:8px;
-  background:#18ff9a;
-  font-weight:bold;
-  cursor:pointer;
-}
-</style>
+    @media (max-width: 900px){
+      .span8,.span4{grid-column: span 12}
+      .big{font-size:40px}
+    }
+  </style>
 </head>
 
 <body>
+  <div class="wrap">
+    <div class="header">
+      <div class="brand">
+        <div class="logo"><svg viewBox="0 0 24 24"><path d="M7 17l10-10v6h2V3H9v2h6L5 15l2 2z"/></svg></div>
+        <div>
+          <p class="title">Nex Wealth</p>
+          <div class="sub">Welcome, <b id="user">User</b></div>
+        </div>
+      </div>
 
-<div class="card">
-  <h2>Welcome, <span id="user"></span></h2>
-  <p>Your Balance:</p>
-  <div class="balance">$10.00</div>
-  <button onclick="logout()">Logout</button>
-</div>
+      <div class="pill">1 USD = <b>285 PKR</b> • Demo Dashboard</div>
+    </div>
 
-<script>
-var name = localStorage.getItem("nw_name");
-if(!name){
-  window.location.href="index.html";
-}
-document.getElementById("user").innerText = name;
+    <div class="grid">
+      <div class="card span8">
+        <p class="cTitle">Available Balance</p>
+        <p class="big"><span id="usd">$0.80</span></p>
+        <div class="small">PKR <span id="pkr">228</span> • Daily Profit +4.00%</div>
 
-function logout(){
-  localStorage.removeItem("nw_name");
-  window.location.href="index.html";
-}
-</script>
+        <div class="btnRow">
+          <button class="btn btnPrimary" id="depositBtn">Deposit</button>
+          <button class="btn" id="withdrawBtn">Withdraw</button>
+          <button class="btn" id="logoutBtn">Logout</button>
+        </div>
+      </div>
 
+      <div class="card span4">
+        <p class="cTitle">Total Earnings</p>
+        <p class="big"><span style="color:var(--green)" id="earn">$-8.40</span></p>
+        <div class="small">Lifetime profits, bonuses & referral income</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const name = localStorage.getItem("nw_name");
+    if(!name){
+      window.location.href = "index.html";
+    }
+    document.getElementById("user").innerText = name;
+
+    // demo actions
+    document.getElementById("depositBtn").onclick = ()=> alert("Deposit demo (next step me modal banayenge)");
+    document.getElementById("withdrawBtn").onclick = ()=> alert("Withdraw demo (next step me modal banayenge)");
+    document.getElementById("logoutBtn").onclick = ()=>{
+      localStorage.removeItem("nw_name");
+      window.location.href = "index.html";
+    };
+
+    // auto profit demo
+    let usd = 0.80;
+    setInterval(()=>{
+      usd = +(usd + 0.01).toFixed(2);
+      document.getElementById("usd").innerText = "$" + usd.toFixed(2);
+      document.getElementById("pkr").innerText = Math.round(usd * 285);
+    }, 5000);
+  </script>
 </body>
 </html>
