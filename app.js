@@ -32,7 +32,37 @@ if ($("goSignup")) {
 }
 
 // ---------- DASHBOARD ----------
-function requireLogin(){
+// -------- LOGIN --------
+if ($("loginBtn")) {
+  $("loginBtn").addEventListener("click", () => {
+    const name = $("name").value.trim();
+    const pin  = $("pin").value.trim();
+
+    const regName = localStorage.getItem("nw_registered_name");
+    const regPin  = localStorage.getItem("nw_registered_pin");
+
+    if(!regName || !regPin){
+      alert("Pehle Create Account karo.");
+      return;
+    }
+
+    if(name !== regName || pin !== regPin){
+      alert("Invalid login! (Name / PIN wrong)");
+      return;
+    }
+
+    localStorage.setItem("nw_name", name);
+    localStorage.setItem("nw_pin", pin);
+
+    window.location.href = "dashboard.html";
+  });
+}
+
+if ($("goSignup")) {
+  $("goSignup").addEventListener("click", () => {
+    window.location.href = "signup.html";
+  });
+}function requireLogin(){
   const name = localStorage.getItem("nw_name");
   if(!name) window.location.href = "index.html";
   return name;
