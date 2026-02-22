@@ -1,3 +1,81 @@
-<button id="goSignup" class="btn2" style="width:100%;" onclick="window.location.href='signup.html'">
-  Create Account
-</button>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account</title>
+
+<style>
+body{
+  margin:0;
+  background:#060b14;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  font-family:Arial;
+}
+.card{
+  background:#111a26;
+  padding:25px;
+  width:300px;
+  border-radius:15px;
+}
+input{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:8px;
+  border:none;
+}
+button{
+  width:100%;
+  padding:10px;
+  margin-top:15px;
+  border:none;
+  border-radius:8px;
+  background:#18ff9a;
+  font-weight:bold;
+  cursor:pointer;
+}
+.back{
+  background:transparent;
+  color:white;
+  border:1px solid white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Create Account</h2>
+
+  <input id="newName" placeholder="Your Name">
+  <input id="newPin" type="password" placeholder="Create PIN">
+
+  <button onclick="signup()">Sign Up</button>
+  <button class="back" onclick="window.location.href='index.html'">Back to Login</button>
+</div>
+
+<script>
+function signup(){
+  var name = document.getElementById("newName").value;
+  var pin = document.getElementById("newPin").value;
+
+  if(name=="" || pin==""){
+    alert("Enter Name and PIN");
+    return;
+  }
+
+  localStorage.setItem("nw_registered_name", name);
+  localStorage.setItem("nw_registered_pin", pin);
+
+  alert("Account Created!");
+  window.location.href="index.html";
+}
+</script>
+
+</body>
+</html>
