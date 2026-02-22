@@ -10,14 +10,24 @@ function copyText(id){
 }
 window.copyText = copyText;
 
-// ---------- LOGIN ----------
+// -------- LOGIN --------
 if ($("loginBtn")) {
+
   $("loginBtn").addEventListener("click", () => {
     const name = $("name").value.trim() || "Ali";
-    const pin = $("pin").value.trim() || "0000";
+    const pin  = $("pin").value.trim()  || "0000";
+
     localStorage.setItem("nw_name", name);
     localStorage.setItem("nw_pin", pin);
+
     window.location.href = "dashboard.html";
+  });
+
+}
+
+if ($("goSignup")) {
+  $("goSignup").addEventListener("click", () => {
+    window.location.href = "signup.html";
   });
 }
 
