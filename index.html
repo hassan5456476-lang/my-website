@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login • Nex Wealth</title>
+
   <style>
     :root{
       --bg:#060b14;
-      --card:#0b1426;
       --border:rgba(255,255,255,.10);
       --text:#eaf0ff;
       --muted:rgba(234,240,255,.65);
@@ -32,7 +32,7 @@
     }
     .wrap{width:min(420px,100%)}
     .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
       border:1px solid var(--border);
       border-radius:var(--r);
       box-shadow:var(--shadow);
@@ -53,6 +53,7 @@
     .logo svg{width:22px;height:22px;fill:#061018}
     h1{font-size:20px;margin:0;letter-spacing:.2px}
     .sub{font-size:13px;color:var(--muted);margin-top:2px}
+
     label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}
     input{
       width:100%;
@@ -74,6 +75,7 @@
       cursor:pointer;
     }
     .link:hover{color:#fff;text-decoration:underline}
+
     .btn{
       width:100%;
       padding:12px;
@@ -94,12 +96,6 @@
       margin-top:10px;
       font-weight:800;
     }
-    .hint{
-      margin-top:12px;
-      font-size:12px;
-      color:var(--muted);
-      text-align:center;
-    }
 
     /* modal */
     .overlay{
@@ -110,16 +106,29 @@
     }
     .modal{
       width:min(420px,100%);
-      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
       border:1px solid var(--border);
       border-radius:18px;
       box-shadow:var(--shadow);
       padding:16px;
+      backdrop-filter: blur(10px);
     }
     .mTitle{font-size:16px;margin:0 0 6px}
-    .mText{font-size:13px;color:var(--muted);margin:0 0 12px}
-    .mRow{display:flex; gap:10px}
+    .mText{font-size:13px;color:var(--muted);margin:0 0 12px;line-height:1.4}
+    .mRow{display:flex; gap:10px; margin-top:12px}
     .mRow button{flex:1}
+
+    .success{
+      display:none;
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(24,255,154,.25);
+      background:rgba(24,255,154,.08);
+      color:rgba(234,240,255,.9);
+      font-size:12px;
+      line-height:1.35;
+    }
   </style>
 </head>
 
@@ -136,32 +145,39 @@
         </div>
       </div>
 
-      <label>Your Name</label>
-      <input id="name" placeholder="e.g., Ali" />
+      <label>Username</label>
+      <input id="username" placeholder="e.g., ali123" autocomplete="username" />
 
-      <label>PIN</label>
-      <input id="pin" type="password" placeholder="••••" />
+      <label>Password</label>
+      <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" />
 
       <div class="row">
-        <span class="link" id="forgotBtn">Forgot PIN?</span>
-        <span class="link" onclick="window.location.href='signup.html'">Create Account →</span>
+        <span class="link" id="forgotBtn">Forgot password?</span>
+        <span class="link" onclick="window.location.href='signup.html'">Create account →</span>
       </div>
 
       <button class="btn btnPrimary" id="loginBtn">Login</button>
       <button class="btn btnGhost" onclick="window.location.href='signup.html'">Create Account</button>
-
-      <div class="hint">Tip: Pehle signup karo, phir login karo.</div>
     </div>
   </div>
 
-  <!-- Forgot Modal -->
+  <!-- Forgot Password Modal (Professional demo) -->
   <div class="overlay" id="overlay">
     <div class="modal">
-      <p class="mTitle">Forgot PIN</p>
-      <p class="mText">Demo app hai. PIN reset karne ke liye “Reset” dabao — account data clear ho jayega.</p>
+      <p class="mTitle">Reset your password</p>
+      <p class="mText">Enter your username or email. We’ll send a reset link (demo).</p>
+
+      <label style="margin-top:0">Username or Email</label>
+      <input id="resetInput" placeholder="e.g., ali123 or ali@gmail.com" />
+
+      <div class="success" id="successBox">
+        ✅ Reset link sent (demo).  
+        Real website me yahan email aata hai. Ab aap “Close” kar ke login page pe wapas ja sakte ho.
+      </div>
+
       <div class="mRow">
-        <button class="btn btnGhost" id="closeModal">Cancel</button>
-        <button class="btn btnPrimary" id="resetBtn">Reset</button>
+        <button class="btn btnGhost" id="closeModal">Close</button>
+        <button class="btn btnPrimary" id="sendLinkBtn">Send reset link</button>
       </div>
     </div>
   </div>
@@ -169,38 +185,49 @@
   <script>
     const $ = (id)=>document.getElementById(id);
 
-    // Login validation (only registered user)
+    // ✅ Login validation (registered user only)
     $("loginBtn").addEventListener("click", ()=>{
-      const name = $("name").value.trim();
-      const pin  = $("pin").value.trim();
+      const username = $("username").value.trim();
+      const password = $("password").value.trim();
 
       const regName = localStorage.getItem("nw_registered_name");
       const regPin  = localStorage.getItem("nw_registered_pin");
 
       if(!regName || !regPin){
-        alert("Pehle Create Account karo.");
-        return;
-      }
-      if(name !== regName || pin !== regPin){
-        alert("Wrong Name / PIN");
+        alert("No account found. Please create an account first.");
         return;
       }
 
-      localStorage.setItem("nw_name", name);
+      // demo: signup stores name/pin, we treat them as username/password
+      if(username !== regName || password !== regPin){
+        alert("Invalid username or password.");
+        return;
+      }
+
+      localStorage.setItem("nw_name", username);
       window.location.href = "dashboard.html";
     });
 
-    // Forgot modal
-    $("forgotBtn").addEventListener("click", ()=> $("overlay").style.display="flex");
-    $("closeModal").addEventListener("click", ()=> $("overlay").style.display="none");
-    $("overlay").addEventListener("click", (e)=>{ if(e.target.id==="overlay") $("overlay").style.display="none"; });
+    // ✅ Forgot modal open/close
+    $("forgotBtn").addEventListener("click", ()=>{
+      $("overlay").style.display="flex";
+      $("successBox").style.display="none";
+      $("resetInput").value="";
+    });
 
-    $("resetBtn").addEventListener("click", ()=>{
-      localStorage.removeItem("nw_registered_name");
-      localStorage.removeItem("nw_registered_pin");
-      localStorage.removeItem("nw_name");
-      alert("Reset done. Ab dobara Create Account karo.");
-      $("overlay").style.display="none";
+    $("closeModal").addEventListener("click", ()=> $("overlay").style.display="none");
+    $("overlay").addEventListener("click", (e)=>{
+      if(e.target.id==="overlay") $("overlay").style.display="none";
+    });
+
+    // ✅ Send reset link (demo)
+    $("sendLinkBtn").addEventListener("click", ()=>{
+      const v = $("resetInput").value.trim();
+      if(!v){
+        alert("Please enter username or email.");
+        return;
+      }
+      $("successBox").style.display="block";
     });
   </script>
 </body>
