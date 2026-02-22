@@ -1,279 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard • Nex Wealth</title>
-  <style>
-    :root{
-      --bg:#060b14; --border:rgba(255,255,255,.08);
-      --text:#eaf0ff; --muted:rgba(234,240,255,.65);
-      --green:#18ff9a; --cyan:#2ae6ff; --shadow:0 18px 50px rgba(0,0,0,.45);
-      --r:18px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; min-height:100vh; padding-bottom:92px;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:
-        radial-gradient(900px 500px at 10% 10%, rgba(42,230,255,.14), transparent 60%),
-        radial-gradient(900px 600px at 90% 10%, rgba(24,255,154,.12), transparent 55%),
-        radial-gradient(900px 600px at 50% 100%, rgba(147,51,234,.10), transparent 60%),
-        var(--bg);
-      color:var(--text);
-    }
-    .wrap{max-width:980px; margin:0 auto; padding:18px 16px 28px;}
-    .topbar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 2px 16px;}
-    .brand{display:flex; align-items:center; gap:12px}
-    .logo{width:44px;height:44px;border-radius:14px;background:radial-gradient(circle at 30% 30%, rgba(42,230,255,.9), rgba(24,255,154,.55));position:relative;box-shadow:0 10px 30px rgba(42,230,255,.12)}
-    .logo:after{content:"↗";position:absolute;inset:0;display:grid;place-items:center;color:#041019;font-weight:900}
-    .brand h1{font-size:22px;margin:0}
-    .brand h1 span{color:var(--cyan)}
-    .meta{text-align:right}
-    .meta .welcome{font-size:14px; color:var(--muted)}
-    .meta .rate{font-size:13px; color:rgba(234,240,255,.55); margin-top:2px}
-    .pill{display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid var(--border); border-radius:999px; background:rgba(255,255,255,.03);}
-    .dot{width:8px;height:8px;border-radius:999px;background:var(--green); box-shadow:0 0 18px rgba(24,255,154,.5)}
-    .grid{display:grid; gap:14px; grid-template-columns:1.2fr .8fr;}
-    @media (max-width:760px){ .grid{grid-template-columns:1fr;} .meta{display:none} }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
 
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
-      border:1px solid var(--border);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .card-inner{padding:18px}
-    .card-title{display:flex; align-items:center; justify-content:space-between; color:rgba(234,240,255,.68); font-size:14px; margin-bottom:10px;}
-    .icon-btn{width:36px;height:36px; display:grid; place-items:center; border-radius:12px; border:1px solid var(--border); background:rgba(255,255,255,.03); cursor:pointer;}
-    .balance{font-size:44px; font-weight:800; margin:0}
-    .sub{color:rgba(234,240,255,.55); margin-top:6px; font-size:14px}
-    .profit{margin-top:14px; display:flex; align-items:center; gap:10px; font-size:14px; color:rgba(234,240,255,.7)}
-    .profit b{color:var(--green)}
-
-    .stat-row{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px}
-    .mini{background:rgba(255,255,255,.02); border:1px solid var(--border); border-radius:16px; padding:14px}
-    .mini .label{color:rgba(234,240,255,.6); font-size:12px; letter-spacing:.6px; text-transform:uppercase}
-    .mini .val{margin-top:10px; font-size:24px; font-weight:800}
-    .mini .val.green{color:var(--green)}
-    .mini .hint{margin-top:6px; color:rgba(234,240,255,.5); font-size:12px}
-
-    .earn{font-size:34px; font-weight:900; margin:0; color:var(--green)}
-    .desc{margin-top:8px; color:rgba(234,240,255,.55); font-size:13px; line-height:1.4}
-
-    .chartWrap{margin-top:12px; border:1px solid var(--border); border-radius:16px; padding:12px; background:rgba(255,255,255,.02)}
-    canvas{width:100%; height:140px; display:block}
-
-    .tx{margin-top:10px; display:grid; gap:10px}
-    .txItem{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px; border-radius:16px; border:1px solid var(--border); background:rgba(255,255,255,.02);}
-    .txLeft{display:flex; align-items:center; gap:10px}
-    .badge{width:36px;height:36px;border-radius:14px; display:grid; place-items:center; border:1px solid var(--border); background:rgba(0,0,0,.2)}
-    .txTitle{font-weight:700; font-size:13px}
-    .txMeta{font-size:12px; color:rgba(234,240,255,.55); margin-top:2px}
-    .txAmt{font-weight:900}
-    .pos{color:var(--green)}
-    .neg{color:#ff5c7a}
-
-    .page{display:none}
-    .page.active{display:block}
-
-    .nav{position:fixed;left:0;right:0;bottom:0;background:rgba(8,12,20,.72);border-top:1px solid var(--border);backdrop-filter:blur(12px);padding:10px 10px 14px;}
-    .nav .inner{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
-    .tab{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 8px;border-radius:16px;color:rgba(234,240,255,.65);border:1px solid transparent;cursor:pointer;user-select:none;font-size:12px;}
-    .tab .ico{font-size:18px}
-    .tab.active{color:var(--green);background:rgba(24,255,154,.08);border-color:rgba(24,255,154,.18);box-shadow:0 10px 30px rgba(24,255,154,.08);}
-    .row{display:flex; gap:10px; flex-wrap:wrap}
-    .btn2{padding:10px 14px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;}
-    .inputSmall{
-      width:120px; padding:8px 10px; border-radius:12px; border:1px solid var(--border);
-      background:rgba(255,255,255,.03); color:var(--text); outline:none;
-    }
-  </style>
+<style>
+body{
+  margin:0;
+  background:#060b14;
+  color:white;
+  font-family:Arial;
+  padding:20px;
+}
+.card{
+  background:#111a26;
+  padding:20px;
+  border-radius:15px;
+  max-width:400px;
+  margin:auto;
+}
+.balance{
+  font-size:30px;
+  color:#18ff9a;
+}
+button{
+  margin-top:20px;
+  padding:10px;
+  width:100%;
+  border:none;
+  border-radius:8px;
+  background:#18ff9a;
+  font-weight:bold;
+  cursor:pointer;
+}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>
-          <h1><span>Nex</span> Wealth</h1>
-          <div class="pill"><span class="dot"></span><span style="color:rgba(234,240,255,.7);font-size:12px">Welcome to Earning Platform</span></div>
-        </div>
-      </div>
 
-      <div class="meta">
-        <div class="welcome">Welcome, <b id="userName">Ali</b></div>
-        <div class="rate">
-          1 USD = <span id="rateText">285</span> PKR
-          &nbsp; | &nbsp; Rate:
-          <input class="inputSmall" id="rateInput" type="number" value="285" />
-        </div>
-      </div>
-    </div>
-
-    <!-- DASHBOARD -->
-    <div id="page-dashboard" class="page active">
-      <div class="grid">
-        <div>
-          <div class="card">
-            <div class="card-inner">
-              <div class="card-title">
-                <span>Available Balance</span>
-                <div class="icon-btn" id="toggleEye" title="Hide/Show">👁️</div>
-              </div>
-
-              <p class="balance" id="balUsd">$0.80</p>
-              <div class="sub" id="balPkr">PKR 228</div>
-
-              <div class="profit">
-                <span style="color:var(--green);font-weight:900">↗</span>
-                <b id="dailyPct">+4.00%</b>
-                <span>Daily Profit</span>
-              </div>
-
-              <div class="chartWrap">
-                <div style="display:flex;justify-content:space-between;align-items:center;color:rgba(234,240,255,.65);font-size:12px;margin-bottom:8px">
-                  <span>Profit (7 days)</span>
-                  <span id="today"></span>
-                </div>
-                <canvas id="profitChart" width="800" height="220"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="stat-row">
-            <div class="mini">
-              <div class="label">Total Invested</div>
-              <div class="val" id="investUsd">$10.00</div>
-              <div class="hint" id="investPkr">PKR 2850</div>
-            </div>
-            <div class="mini">
-              <div class="label">Referral Earnings</div>
-              <div class="val green" id="refUsd">$0.80</div>
-              <div class="hint" id="refPkr">PKR 228</div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="card">
-            <div class="card-inner">
-              <div class="card-title">
-                <span>Total Earnings</span>
-                <span style="color:var(--green); font-weight:900">$</span>
-              </div>
-              <p class="earn" id="earnUsd">$-8.40</p>
-              <div class="sub" id="earnPkr">PKR -2394</div>
-              <div class="desc">Lifetime profits, bonuses & referral income</div>
-
-              <div style="margin-top:14px; color:rgba(234,240,255,.6); font-size:12px; letter-spacing:.6px; text-transform:uppercase;">Quick Actions</div>
-              <div class="row" style="margin-top:10px">
-                <button class="btn2" id="addDeposit">Deposit</button>
-                <button class="btn2" id="addWithdraw">Withdraw</button>
-                <button class="btn2" onclick="switchTab('plan')">Add Plan</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="card" style="margin-top:14px">
-            <div class="card-inner">
-              <div class="card-title"><span>Recent Transactions</span><span style="color:rgba(234,240,255,.55);font-size:12px">USD + PKR</span></div>
-              <div class="tx" id="txList"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- INVITE -->
-    <div id="page-invite" class="page">
-  <div class="card">
-    <div class="card-inner">
-      <div class="card-title"><span>Invite Friends</span><span style="color:var(--green);font-weight:900">👥</span></div>
-      <div class="desc">Referral link generator (demo).</div>
-
-      <div class="row" style="margin-top:12px">
-        <button class="btn2" id="genRefBtn">Generate Link</button>
-        <button class="btn2" id="copyRefBtn">Copy</button>
-      </div>
-
-      <input class="btn2" style="width:100%;text-align:left;margin-top:10px" id="refLink" value="" />
-      <div class="desc" style="margin-top:8px">Aapka link username se auto banega.</div>
-    </div>
-  </div>
+<div class="card">
+  <h2>Welcome, <span id="user"></span></h2>
+  <p>Your Balance:</p>
+  <div class="balance">$10.00</div>
+  <button onclick="logout()">Logout</button>
 </div>
 
-    <!-- WALLET -->
-    <div id="page-wallet" class="page">
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-title"><span>Wallet History</span><span style="color:var(--cyan);font-weight:900">💳</span></div>
-          <div class="desc">Full transactions (USD + PKR).</div>
-          <div class="tx" id="txListFull" style="margin-top:10px"></div>
-        </div>
-      </div>
-    </div>
+<script>
+var name = localStorage.getItem("nw_name");
+if(!name){
+  window.location.href="index.html";
+}
+document.getElementById("user").innerText = name;
 
-    <!-- PLAN -->
-    <div id="page-plan" class="page">
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-title"><span>Plans</span><span style="color:var(--green);font-weight:900">📦</span></div>
-          <div class="desc">Pricing cards (demo).</div>
+function logout(){
+  localStorage.removeItem("nw_name");
+  window.location.href="index.html";
+}
+</script>
 
-          <div style="display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px">
-            <div class="mini">
-              <div class="label">Starter</div>
-              <div class="val">$10</div>
-              <div class="hint">Daily 1% • 30 days</div>
-              <div class="hint" id="p10">PKR 2850</div>
-              <div class="row" style="margin-top:10px"><button class="btn2" onclick="alert('Demo: Starter plan purchase')">Buy</button></div>
-            </div>
-            <div class="mini">
-              <div class="label">Pro</div>
-              <div class="val">$50</div>
-              <div class="hint">Daily 2% • 30 days</div>
-              <div class="hint" id="p50">PKR 14250</div>
-              <div class="row" style="margin-top:10px"><button class="btn2" onclick="alert('Demo: Pro plan purchase')">Buy</button></div>
-            </div>
-            <div class="mini">
-              <div class="label">Elite</div>
-              <div class="val">$100</div>
-              <div class="hint">Daily 3% • 30 days</div>
-              <div class="hint" id="p100">PKR 28500</div>
-              <div class="row" style="margin-top:10px"><button class="btn2" onclick="alert('Demo: Elite plan purchase')">Buy</button></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SETTINGS -->
-    <div id="page-settings" class="page">
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-title"><span>Settings</span><span style="color:rgba(234,240,255,.6);font-weight:900">⚙️</span></div>
-          <div class="desc">Demo settings: logout.</div>
-          <div class="row" style="margin-top:12px">
-            <button class="btn2" id="logoutBtn">Logout</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bottom nav -->
-  <div class="nav">
-    <div class="inner">
-      <div class="tab active" data-tab="dashboard"><div class="ico">▦</div>Dashboard</div>
-      <div class="tab" data-tab="invite"><div class="ico">👥</div>Invite</div>
-      <div class="tab" data-tab="wallet"><div class="ico">💳</div>Wallet</div>
-      <div class="tab" data-tab="plan"><div class="ico">📦</div>Plan</div>
-      <div class="tab" data-tab="settings"><div class="ico">⚙️</div>Settings</div>
-    </div>
-  </div>
-
-  <script src="app.js"></script>
 </body>
 </html>
