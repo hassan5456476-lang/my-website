@@ -188,17 +188,21 @@
 
     <!-- INVITE -->
     <div id="page-invite" class="page">
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-title"><span>Invite Friends</span><span style="color:var(--green);font-weight:900">👥</span></div>
-          <div class="desc">Referral link demo.</div>
-          <input class="btn2" style="width:100%;text-align:left" id="refLink" value="https://your-site.github.io/?ref=ALI123" />
-          <div class="row" style="margin-top:10px">
-            <button class="btn2" onclick="copyText('refLink')">Copy</button>
-          </div>
-        </div>
+  <div class="card">
+    <div class="card-inner">
+      <div class="card-title"><span>Invite Friends</span><span style="color:var(--green);font-weight:900">👥</span></div>
+      <div class="desc">Referral link generator (demo).</div>
+
+      <div class="row" style="margin-top:12px">
+        <button class="btn2" id="genRefBtn">Generate Link</button>
+        <button class="btn2" id="copyRefBtn">Copy</button>
       </div>
+
+      <input class="btn2" style="width:100%;text-align:left;margin-top:10px" id="refLink" value="" />
+      <div class="desc" style="margin-top:8px">Aapka link username se auto banega.</div>
     </div>
+  </div>
+</div>
 
     <!-- WALLET -->
     <div id="page-wallet" class="page">
