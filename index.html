@@ -1,10 +1,82 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Website</title>
+  <style>
+    body{margin:0;font-family:Arial, sans-serif;background:#0b1220;color:#fff}
+    header{padding:60px 20px;text-align:center;background:linear-gradient(135deg,#1d4ed8,#9333ea)}
+    h1{margin:0;font-size:40px}
+    p{opacity:.9;max-width:700px;margin:12px auto}
+    .btn{display:inline-block;margin-top:18px;padding:12px 18px;background:#fff;color:#111;
+      border-radius:12px;text-decoration:none;font-weight:bold}
+    .container{max-width:1000px;margin:0 auto;padding:30px 20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+    .card{background:#111a2e;border:1px solid rgba(255,255,255,.08);padding:18px;border-radius:16px}
+    .card h3{margin:0 0 8px}
+    footer{padding:25px;text-align:center;opacity:.7}
+    .nav{display:flex;gap:16px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+    .nav a{color:#fff;opacity:.9;text-decoration:none}
+    .nav a:hover{opacity:1;text-decoration:underline}
+  </style>
 </head>
 <body>
-  <h1>Ye meri pehli website hai 🎉</h1>
-  <button onclick="alert('Website chal rahi hai!')">Click karo</button>
+
+  <header>
+    <h1>Hi, I’m Hassan 👋</h1>
+    <p>Welcome to my website. Ye meri GitHub Pages par live website hai. Ab main isko professional bana raha hoon.</p>
+
+    <div class="nav">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <a class="btn" href="#contact">Contact Me</a>
+  </header>
+
+  <div class="container">
+    <section id="about">
+      <h2>About Me</h2>
+      <p>
+        Main apni pehli website bana raha hoon. Is page ko aap portfolio, business ya personal website bana sakte ho.
+      </p>
+    </section>
+
+    <section id="services" style="margin-top:28px">
+      <h2>Services</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Web Design</h3>
+          <p>Simple aur clean website design.</p>
+        </div>
+        <div class="card">
+          <h3>Video Editing</h3>
+          <p>Professional edits for social media & YouTube.</p>
+        </div>
+        <div class="card">
+          <h3>Content Support</h3>
+          <p>Ideas, planning aur premium content strategy.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" style="margin-top:28px">
+      <h2>Contact</h2>
+      <p>Button par click karo — email open ho jayegi:</p>
+
+      <a class="btn" href="mailto:youremail@gmail.com">Email Me</a>
+      <p style="margin-top:10px;opacity:.8">Apna email yahan replace kar dena: <b>youremail@gmail.com</b></p>
+    </section>
+  </div>
+
+  <footer>
+    © <span id="year"></span> My Website — Built with GitHub Pages
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
