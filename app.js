@@ -13,7 +13,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
 /* =========================
-   🔥 PASTE YOUR REAL CONFIG
 ========================= */
 const firebaseConfig = {
   apiKey: "AIzaSyApp1ryOm7jE...",
