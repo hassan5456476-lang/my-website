@@ -1,28 +1,22 @@
 // ===============================
-// 🔥 FIREBASE IMPORTS
+// 🔥 FIREBASE IMPORTS (MODULE)
 // ===============================
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-
 import {
   getFirestore,
   doc,
   setDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-
-
 // ===============================
-// 🔥 FIREBASE CONFIG
+// 🔥 FIREBASE CONFIG (YOUR PROJECT)
 // ===============================
-
 const firebaseConfig = {
   apiKey: "AIzaSyApp1ry0m7jEbBYXFOUBh2nt29EhKm-En8",
   authDomain: "next-wealth.firebaseapp.com",
@@ -32,74 +26,58 @@ const firebaseConfig = {
   appId: "1:566046327509:web:3f28fc9f91812531c5185c",
   measurementId: "G-2NL786R6KR"
 };
-
-
 // ===============================
 // 🔥 INITIALIZE
 // ===============================
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-
 // ===============================
 // 🔥 HELPER
 // ===============================
-
 const $ = (id) => document.getElementById(id);
-
-
 // ===============================
-// 🔥 SIGNUP
+// ✅ SIGNUP (signup.html)
 // ===============================
-
 const signupBtn = $("signupBtn");
 
 if (signupBtn) {
   signupBtn.addEventListener("click", async () => {
-
-    const username = $("signupUsername").value.trim();
-    const email = $("signupEmail").value.trim();
-    const password = $("signupPassword").value.trim();
+    const username = $("signupUsername")?.value.trim();
+    const email = $("signupEmail")?.value.trim();
+    const password = $("signupPassword")?.value.trim();
 
     if (!username || !email || !password) {
       alert("Please fill all fields");
       return;
     }
-
     try {
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCred.user;
 
       await setDoc(doc(db, "users", user.uid), {
-        username: username,
-        email: email,
+        username,
+        email,
+        balance: 0,
         createdAt: serverTimestamp()
       });
 
       alert("Account created successfully!");
       window.location.href = "index.html";
-
     } catch (error) {
       alert(error.message);
     }
-
   });
 }
-
-
 // ===============================
-// 🔥 LOGIN
+// ✅ LOGIN (index.html)
 // ===============================
-
 const loginBtn = $("loginBtn");
 
 if (loginBtn) {
   loginBtn.addEventListener("click", async () => {
-
-    const email = $("loginEmail").value.trim();
-    const password = $("loginPassword").value.trim();
+    const email = $("loginEmail")?.value.trim();
+    const password = $("loginPassword")?.value.trim();
 
     if (!email || !password) {
       alert("Enter email and password");
@@ -110,25 +88,19 @@ if (loginBtn) {
       await signInWithEmailAndPassword(auth, email, password);
       alert("Login successful!");
       window.location.href = "dashboard.html";
-
     } catch (error) {
       alert(error.message);
     }
-
   });
 }
-
-
 // ===============================
-// 🔥 FORGOT PASSWORD
+// ✅ FORGOT PASSWORD (modal/index.html)
 // ===============================
+const sendResetBtn = $("sendResetBtn");
 
-const forgotBtn = $("sendResetBtn");
-
-if (forgotBtn) {
-  forgotBtn.addEventListener("click", async () => {
-
-    const email = $("resetEmail").value.trim();
+if (sendResetBtn) {
+  sendResetBtn.addEventListener("click", async () => {
+    const email = $("resetEmail")?.value.trim();
 
     if (!email) {
       alert("Enter your email");
@@ -137,11 +109,9 @@ if (forgotBtn) {
 
     try {
       await sendPasswordResetEmail(auth, email);
-      alert("Reset link sent! Check your email.");
-
+      alert("Reset link sent! Check your email inbox/spam.");
     } catch (error) {
       alert(error.message);
     }
-
   });
 }
