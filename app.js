@@ -16,8 +16,15 @@ import {
    🔥 PASTE YOUR REAL CONFIG
 ========================= */
 const firebaseConfig = {
-  apiKey: "PASTE_HERE",
-  authDomain: "PASTE_HERE",
+  const firebaseConfig = {
+  apiKey: "AIzaSyApp1ryOm7jE...",
+  authDomain: "next-wealth.firebaseapp.com",
+  projectId: "next-wealth",
+  storageBucket: "next-wealth.firebasestorage.app",
+  messagingSenderId: "566046327509",
+  appId: "1:566046327509:web:3f28fc9f91812531c5185c",
+  measurementId: "G-2NL786R6KR"
+};
   projectId: "PASTE_HERE",
   storageBucket: "PASTE_HERE",
   messagingSenderId: "PASTE_HERE",
