@@ -19,9 +19,6 @@ const firebaseConfig = {
   messagingSenderId: "566046327509",
   appId: "1:566046327509:web:3f28fc9f91812531c5185c",
   measurementId: "G-2NL786R6KR"
-};
-   SIGNUP
-========================= */
 if ($("signupBtn")) {
   $("signupBtn").addEventListener("click", async () => {
     const username = $("suUsername").value.trim();
