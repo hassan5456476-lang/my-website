@@ -2,124 +2,159 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login • Nex Wealth</title>
   <style>
     :root{
-      --bg:#060b14;--border:rgba(255,255,255,.10);--text:#eaf0ff;
-      --muted:rgba(234,240,255,.65);--green:#18ff9a;--cyan:#2ae6ff;
-      --r:18px;--shadow:0 18px 60px rgba(0,0,0,.55);
+      --bg:#060b14;
+      --card:rgba(255,255,255,.06);
+      --border:rgba(255,255,255,.12);
+      --text:#eaf0ff;
+      --muted:rgba(234,240,255,.65);
+      --shadow:0 18px 70px rgba(0,0,0,.55);
+      --r:22px;
+      --grad: linear-gradient(90deg, #16ff9b 0%, #22d3ee 100%);
     }
     *{box-sizing:border-box}
     body{
-      margin:0;min-height:100vh;display:grid;place-items:center;padding:18px;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      margin:0; min-height:100vh;
+      display:grid; place-items:center;
+      font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background:
-        radial-gradient(900px 500px at 10% 10%, rgba(42,230,255,.14), transparent 60%),
-        radial-gradient(900px 600px at 90% 10%, rgba(24,255,154,.12), transparent 55%),
+        radial-gradient(1200px 600px at 30% 10%, rgba(34,211,238,.18), transparent 55%),
+        radial-gradient(900px 500px at 80% 30%, rgba(22,255,155,.14), transparent 55%),
         var(--bg);
       color:var(--text);
     }
+    .wrap{width:min(560px, 92vw)}
     .card{
-      width:min(520px,100%);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
       border:1px solid var(--border);
-      border-radius:24px;
-      background:rgba(255,255,255,.04);
       box-shadow:var(--shadow);
-      padding:22px;
+      border-radius:var(--r);
+      padding:28px;
       backdrop-filter: blur(10px);
+      position:relative;
     }
-    .head{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+    .top{display:flex; gap:14px; align-items:center; margin-bottom:16px}
     .logo{
-      width:52px;height:52px;border-radius:16px;
-      background:linear-gradient(135deg,var(--green),var(--cyan));
-      display:grid;place-items:center;color:#001b12;font-weight:900;
+      width:46px; height:46px; border-radius:14px;
+      background:var(--grad);
+      display:grid; place-items:center;
+      color:#041015; font-weight:900;
     }
-    h1{margin:0;font-size:26px}
-    .sub{margin:2px 0 0;color:var(--muted);font-size:13px}
-    label{display:block;margin-top:12px;margin-bottom:6px;color:var(--muted);font-size:13px}
+    h1{margin:0; font-size:32px}
+    .sub{margin:2px 0 0; color:var(--muted); font-size:13px}
+
+    label{display:block; margin:14px 0 8px; color:var(--muted); font-size:13px}
     input{
-      width:100%;padding:14px 14px;border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(0,0,0,.22);color:var(--text);
+      width:100%;
+      padding:14px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.20);
+      color:var(--text);
       outline:none;
     }
-    input:focus{border-color:rgba(42,230,255,.55)}
-    .row{
-      display:flex;justify-content:space-between;gap:12px;
-      margin-top:10px;font-size:13px
+    input:focus{border-color:rgba(34,211,238,.55)}
+
+    .meta{
+      display:flex; justify-content:space-between; align-items:center;
+      margin-top:10px; font-size:13px;
     }
-    .link{
-      color:rgba(234,240,255,.75);text-decoration:none;
+    .link{color:#9ae6ff; cursor:pointer; text-decoration:none}
+    .link:hover{text-decoration:underline}
+
+    .btn{
+      width:100%;
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:14px;
+      border:none;
+      font-weight:800;
       cursor:pointer;
     }
-    .link:hover{color:white}
-    .btn{
-      width:100%;padding:14px;border-radius:14px;border:0;cursor:pointer;
-      margin-top:14px;font-weight:800;
-    }
-    .btn.primary{
-      background:linear-gradient(90deg,var(--green),var(--cyan));
-      color:#001b12;
-    }
+    .btn.primary{background:var(--grad); color:#041015}
     .btn.ghost{
-      background:transparent;border:1px solid rgba(255,255,255,.14);
+      background:transparent;
       color:var(--text);
+      border:1px solid rgba(255,255,255,.18);
+      margin-top:12px;
     }
-    .msg{margin-top:10px;font-size:13px;color:var(--muted)}
+
     /* Modal */
-    .overlay{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.55);padding:18px}
-    .modal{
-      width:min(520px,100%);background:#0b1220;border:1px solid rgba(255,255,255,.12);
-      border-radius:18px;padding:18px;
+    .overlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.55);
+      display:none;
+      place-items:center;
+      padding:18px;
     }
-    .modal h2{margin:0 0 8px}
-    .modal .x{float:right;cursor:pointer;color:rgba(255,255,255,.7)}
+    .modal{
+      width:min(520px, 94vw);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .modalTop{display:flex; justify-content:space-between; align-items:center}
+    .modal h3{margin:0}
+    .x{cursor:pointer; font-size:20px; opacity:.8}
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="head">
-      <div class="logo">↗</div>
-      <div>
-        <h1>Nex Wealth</h1>
-        <div class="sub">Welcome to Earning Platform</div>
+  <div class="wrap">
+    <div class="card">
+      <div class="top">
+        <div class="logo">↗</div>
+        <div>
+          <h1>Nex Wealth</h1>
+          <p class="sub">Welcome to Earning Platform</p>
+        </div>
       </div>
+
+      <label for="loginEmail">Email</label>
+      <input id="loginEmail" type="email" placeholder="e.g., ali@gmail.com" />
+
+      <label for="loginPassword">Password</label>
+      <input id="loginPassword" type="password" placeholder="Enter your password" />
+
+      <div class="meta">
+        <span id="openReset" class="link">Forgot password?</span>
+        <a class="link" href="signup.html">Create account →</a>
+      </div>
+
+      <button id="loginBtn" class="btn primary">Login</button>
+      <button class="btn ghost" onclick="window.location.href='signup.html'">Create Account</button>
     </div>
-
-    <label>Email</label>
-    <input id="loginEmail" type="email" placeholder="e.g., ali@gmail.com">
-
-    <label>Password</label>
-    <input id="loginPass" type="password" placeholder="Enter your password">
-
-    <div class="row">
-      <a class="link" id="forgotBtn">Forgot password?</a>
-      <a class="link" href="signup.html">Create account →</a>
-    </div>
-
-    <button class="btn primary" id="loginBtn">Login</button>
-
-    <button class="btn ghost" onclick="window.location.href='signup.html'">Create Account</button>
-
-    <div class="msg" id="msg"></div>
   </div>
 
-  <!-- Forgot modal -->
-  <div class="overlay" id="overlay">
+  <!-- Reset Modal -->
+  <div id="overlay" class="overlay">
     <div class="modal">
-      <div class="x" id="closeModal">✕</div>
-      <h2>Reset Password</h2>
-      <div class="sub">Apna email likho, reset link email pe aa jayega.</div>
-
-      <label style="margin-top:12px">Email</label>
-      <input id="resetEmail" type="email" placeholder="e.g., ali@gmail.com">
-
-      <button class="btn primary" id="sendResetBtn">Send Reset Link</button>
-      <div class="msg" id="resetMsg"></div>
+      <div class="modalTop">
+        <h3>Reset Password</h3>
+        <div id="closeReset" class="x">✕</div>
+      </div>
+      <p style="color:rgba(234,240,255,.65); margin:8px 0 14px; font-size:13px;">
+        Apna email likho, reset link email pe aa jayega.
+      </p>
+      <label for="resetEmail">Email</label>
+      <input id="resetEmail" type="email" placeholder="e.g., ali@gmail.com" />
+      <button id="sendResetBtn" class="btn primary">Send Reset Link</button>
     </div>
   </div>
 
+  <script>
+    // Modal open/close (simple)
+    const overlay = document.getElementById("overlay");
+    document.getElementById("openReset").onclick = () => overlay.style.display = "grid";
+    document.getElementById("closeReset").onclick = () => overlay.style.display = "none";
+    overlay.onclick = (e) => { if (e.target === overlay) overlay.style.display = "none"; };
+  </script>
+
+  <!-- ✅ MUST BE module -->
   <script type="module" src="./app.js"></script>
 </body>
 </html>
