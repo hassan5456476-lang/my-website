@@ -16,7 +16,6 @@ import {
    🔥 PASTE YOUR REAL CONFIG
 ========================= */
 const firebaseConfig = {
-  const firebaseConfig = {
   apiKey: "AIzaSyApp1ryOm7jE...",
   authDomain: "next-wealth.firebaseapp.com",
   projectId: "next-wealth",
@@ -25,10 +24,6 @@ const firebaseConfig = {
   appId: "1:566046327509:web:3f28fc9f91812531c5185c",
   measurementId: "G-2NL786R6KR"
 };
-  projectId: "PASTE_HERE",
-  storageBucket: "PASTE_HERE",
-  messagingSenderId: "PASTE_HERE",
-  appId: "PASTE_HERE"
 };
 
 const app = initializeApp(firebaseConfig);
