@@ -11,11 +11,9 @@ import {
   setDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-
-/* =========================
-========================= */
+// 🔥 Firebase Config (ONLY ONCE)
 const firebaseConfig = {
-  apiKey: "AIzaSyApp1ryOm7jE...",
+  apiKey: "AIzaSyApp1ry0m7jEbBYXFOUBh2nt29EhKm-En8",
   authDomain: "next-wealth.firebaseapp.com",
   projectId: "next-wealth",
   storageBucket: "next-wealth.firebasestorage.app",
@@ -23,15 +21,6 @@ const firebaseConfig = {
   appId: "1:566046327509:web:3f28fc9f91812531c5185c",
   measurementId: "G-2NL786R6KR"
 };
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-const $ = (id) => document.getElementById(id);
-
-/* =========================
    SIGNUP
 ========================= */
 if ($("signupBtn")) {
