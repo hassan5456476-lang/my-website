@@ -1,73 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Create Account • Nex Wealth</title>
   <style>
     :root{
-      --bg:#060b14;--border:rgba(255,255,255,.10);--text:#eaf0ff;
-      --muted:rgba(234,240,255,.65);--green:#18ff9a;--cyan:#2ae6ff;
-      --shadow:0 18px 60px rgba(0,0,0,.55);
+      --bg:#060b14;
+      --card:rgba(255,255,255,.06);
+      --border:rgba(255,255,255,.12);
+      --text:#eaf0ff;
+      --muted:rgba(234,240,255,.65);
+      --shadow:0 18px 70px rgba(0,0,0,.55);
+      --r:22px;
+      --grad: linear-gradient(90deg, #16ff9b 0%, #22d3ee 100%);
     }
     *{box-sizing:border-box}
     body{
-      margin:0;min-height:100vh;display:grid;place-items:center;padding:18px;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      margin:0; min-height:100vh;
+      display:grid; place-items:center;
+      font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background:
-        radial-gradient(900px 500px at 10% 10%, rgba(42,230,255,.14), transparent 60%),
-        radial-gradient(900px 600px at 90% 10%, rgba(24,255,154,.12), transparent 55%),
+        radial-gradient(1200px 600px at 30% 10%, rgba(34,211,238,.18), transparent 55%),
+        radial-gradient(900px 500px at 80% 30%, rgba(22,255,155,.14), transparent 55%),
         var(--bg);
       color:var(--text);
     }
+    .wrap{width:min(520px, 92vw)}
     .card{
-      width:min(520px,100%);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
       border:1px solid var(--border);
-      border-radius:24px;
-      background:rgba(255,255,255,.04);
       box-shadow:var(--shadow);
-      padding:22px;
+      border-radius:var(--r);
+      padding:28px;
       backdrop-filter: blur(10px);
     }
-    h1{margin:0 0 6px;font-size:26px}
-    .sub{margin:0 0 14px;color:var(--muted);font-size:13px}
-    label{display:block;margin-top:12px;margin-bottom:6px;color:var(--muted);font-size:13px}
+    h1{margin:0 0 6px; font-size:34px}
+    .sub{margin:0 0 18px; color:var(--muted); font-size:14px}
+    label{display:block; margin:14px 0 8px; color:var(--muted); font-size:13px}
     input{
-      width:100%;padding:14px 14px;border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(0,0,0,.22);color:var(--text);
+      width:100%;
+      padding:14px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.20);
+      color:var(--text);
       outline:none;
     }
-    input:focus{border-color:rgba(42,230,255,.55)}
+    input:focus{border-color:rgba(34,211,238,.55)}
     .btn{
-      width:100%;padding:14px;border-radius:14px;border:0;cursor:pointer;
-      margin-top:14px;font-weight:800;
+      width:100%;
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:14px;
+      border:none;
+      font-weight:700;
+      cursor:pointer;
     }
-    .btn.primary{background:linear-gradient(90deg,#18ff9a,#2ae6ff);color:#001b12;}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.14);color:var(--text);}
-    .msg{margin-top:10px;font-size:13px;color:var(--muted)}
+    .btn.primary{background:var(--grad); color:#041015}
+    .btn.ghost{
+      background:transparent;
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.18);
+      margin-top:12px;
+    }
+    .row{display:flex; gap:12px}
+    .row > div{flex:1}
+    .hint{margin-top:12px; color:rgba(255,255,255,.55); font-size:12px; text-align:center}
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Create Account</h1>
-    <div class="sub">Username + Email + Password</div>
+  <div class="wrap">
+    <div class="card">
+      <h1>Create Account</h1>
+      <p class="sub">Username + Email + Password</p>
 
-    <label>Username</label>
-    <input id="suUsername" placeholder="e.g., ali123">
+      <!-- ✅ IDs MUST MATCH app.js -->
+      <label for="signupUsername">Username</label>
+      <input id="signupUsername" type="text" placeholder="e.g., ali123" />
 
-    <label>Email</label>
-    <input id="suEmail" type="email" placeholder="e.g., ali@gmail.com">
+      <label for="signupEmail">Email</label>
+      <input id="signupEmail" type="email" placeholder="e.g., ali@gmail.com" />
 
-    <label>Password</label>
-    <input id="suPass" type="password" placeholder="Min 6 characters">
+      <label for="signupPassword">Password</label>
+      <input id="signupPassword" type="password" placeholder="Min 6 characters" />
 
-    <button class="btn primary" id="signupBtn">Sign Up</button>
-    <button class="btn ghost" onclick="window.location.href='index.html'">Back to Login</button>
+      <button id="signupBtn" class="btn primary">Sign Up</button>
+      <button class="btn ghost" onclick="window.location.href='index.html'">Back to Login</button>
 
-    <div class="msg" id="suMsg"></div>
+      <div class="hint">Account banay ga Firebase Auth + Firestore me save ho ga.</div>
+    </div>
   </div>
 
+  <!-- ✅ MUST BE module -->
   <script type="module" src="./app.js"></script>
 </body>
 </html>
