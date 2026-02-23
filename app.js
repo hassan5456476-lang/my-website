@@ -11,7 +11,6 @@ import {
   setDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-// 🔥 Firebase Config (ONLY ONCE)
 const firebaseConfig = {
   apiKey: "AIzaSyApp1ry0m7jEbBYXFOUBh2nt29EhKm-En8",
   authDomain: "next-wealth.firebaseapp.com",
