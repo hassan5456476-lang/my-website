@@ -1,22 +1,23 @@
-// ===============================
-// 🔥 FIREBASE IMPORTS (MODULE)
-// ===============================
+// app.js (module) ✅
+// Works on BOTH pages: index.html + signup.html
+// Null checks included so no page crashes.
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 import {
   getAuth,
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  sendPasswordResetEmail
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendPasswordResetEmail,
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 import {
   getFirestore,
   doc,
   setDoc,
-  serverTimestamp
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-// ===============================
-// 🔥 FIREBASE CONFIG (YOUR PROJECT)
-// ===============================
+
+// ✅ Your Firebase config (paste EXACT from Firebase settings)
 const firebaseConfig = {
   apiKey: "AIzaSyApp1ry0m7jEbBYXFOUBh2nt29EhKm-En8",
   authDomain: "next-wealth.firebaseapp.com",
@@ -24,94 +25,119 @@ const firebaseConfig = {
   storageBucket: "next-wealth.firebasestorage.app",
   messagingSenderId: "566046327509",
   appId: "1:566046327509:web:3f28fc9f91812531c5185c",
-  measurementId: "G-2NL786R6KR"
+  measurementId: "G-2NL786R6KR",
 };
-// ===============================
-// 🔥 INITIALIZE
-// ===============================
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-// ===============================
-// 🔥 HELPER
-// ===============================
+
 const $ = (id) => document.getElementById(id);
-// ===============================
-// ✅ SIGNUP (signup.html)
-// ===============================
-const signupBtn = $("signupBtn");
 
-if (signupBtn) {
-  signupBtn.addEventListener("click", async () => {
-    const username = $("signupUsername")?.value.trim();
-    const email = $("signupEmail")?.value.trim();
-    const password = $("signupPassword")?.value.trim();
+// Run after HTML loads
+window.addEventListener("DOMContentLoaded", () => {
+  // -------------------------
+  // ✅ LOGIN (index.html)
+  // -------------------------
+  const loginBtn = $("loginBtn");
+  if (loginBtn) {
+    loginBtn.addEventListener("click", async () => {
+      const email = ($("loginEmail")?.value || "").trim();
+      const pass = ($("loginPassword")?.value || "").trim();
 
-    if (!username || !email || !password) {
-      alert("Please fill all fields");
-      return;
-    }
-    try {
-      const userCred = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCred.user;
+      if (!email || !pass) return alert("Email aur password dono likho!");
 
-      await setDoc(doc(db, "users", user.uid), {
-        username,
-        email,
-        balance: 0,
-        createdAt: serverTimestamp()
-      });
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        window.location.href = "dashboard.html";
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
+  }
 
-      alert("Account created successfully!");
-      window.location.href = "index.html";
-    } catch (error) {
-      alert(error.message);
-    }
-  });
-}
-// ===============================
-// ✅ LOGIN (index.html)
-// ===============================
-const loginBtn = $("loginBtn");
+  // -------------------------
+  // ✅ FORGOT PASSWORD MODAL (index.html)
+  // -------------------------
+  const overlay = $("overlay");
+  const openReset = $("openReset");
+  const closeReset = $("closeReset");
+  const sendResetBtn = $("sendResetBtn");
 
-if (loginBtn) {
-  loginBtn.addEventListener("click", async () => {
-    const email = $("loginEmail")?.value.trim();
-    const password = $("loginPassword")?.value.trim();
+  if (openReset && overlay) {
+    openReset.style.cursor = "pointer";
+    openReset.addEventListener("click", () => {
+      overlay.style.display = "grid";
+      // auto-fill from login email if available
+      if ($("loginEmail") && $("resetEmail")) {
+        $("resetEmail").value = $("loginEmail").value || "";
+      }
+    });
+  }
 
-    if (!email || !password) {
-      alert("Enter email and password");
-      return;
-    }
+  if (closeReset && overlay) {
+    closeReset.addEventListener("click", () => {
+      overlay.style.display = "none";
+    });
+  }
 
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("Login successful!");
-      window.location.href = "dashboard.html";
-    } catch (error) {
-      alert(error.message);
-    }
-  });
-}
-// ===============================
-// ✅ FORGOT PASSWORD (modal/index.html)
-// ===============================
-const sendResetBtn = $("sendResetBtn");
+  if (overlay) {
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) overlay.style.display = "none";
+    });
+  }
 
-if (sendResetBtn) {
-  sendResetBtn.addEventListener("click", async () => {
-    const email = $("resetEmail")?.value.trim();
+  if (sendResetBtn) {
+    sendResetBtn.addEventListener("click", async () => {
+      const email = ($("resetEmail")?.value || "").trim();
+      if (!email) return alert("Reset ke liye email likho!");
 
-    if (!email) {
-      alert("Enter your email");
-      return;
-    }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert("✅ Reset link send hogaya. Inbox/Spam check karo.");
+        if (overlay) overlay.style.display = "none";
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
+  }
 
-    try {
-      await sendPasswordResetEmail(auth, email);
-      alert("Reset link sent! Check your email inbox/spam.");
-    } catch (error) {
-      alert(error.message);
-    }
-  });
-}
+  // -------------------------
+  // ✅ SIGNUP (signup.html)
+  // -------------------------
+  const signupBtn = $("signupBtn");
+  if (signupBtn) {
+    signupBtn.addEventListener("click", async () => {
+      const username = ($("signupUsername")?.value || "").trim();
+      const email = ($("signupEmail")?.value || "").trim();
+      const pass = ($("signupPassword")?.value || "").trim();
+
+      if (!username || !email || !pass) return alert("Username, email, password sab likho!");
+      if (pass.length < 6) return alert("Password minimum 6 characters hona chahiye!");
+
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+        // Set display name
+        await updateProfile(cred.user, { displayName: username });
+
+        // Save user in Firestore
+        await setDoc(doc(db, "users", cred.user.uid), {
+          uid: cred.user.uid,
+          username,
+          email,
+          balance: 0,
+          createdAt: serverTimestamp(),
+        });
+
+        alert("✅ Account create hogaya. Ab login karo.");
+        window.location.href = "index.html";
+      } catch (e) {
+        alert(e.message);
+        console.error(e);
+      }
+    });
+  }
+});
